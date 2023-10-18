@@ -1,4 +1,4 @@
-import 'package:cinema_pedia/presentation/providers/movies/movies_providers.dart';
+import 'package:cinema_pedia/presentation/providers/providers.dart';
 import 'package:cinema_pedia/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return const Scaffold(
       body: _HomeView(),
     );
   }
@@ -47,15 +47,16 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    // riverpod retorna el State: List<Movie> del provider
-    final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    // // riverpod retorna el State: List<Movie> del provider
+    // final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final slideShowMovies = ref.watch(moviesSlideshowProvider);
 
     return Column(
 
       children: [
         const CustomAppbar(),
 
-        MoviesSlideshow(movies: nowPlayingMovies),
+        MoviesSlideshow(movies: slideShowMovies),
 
         /* Expanded( // toma todo el espacio disponible del parent
           child: ListView.builder( // requiere heigth/width fijo
