@@ -19,6 +19,7 @@ class MoviedbDatasource extends MoviesDataSource {
   ));
 
 
+  // es quien hace el   fetch   a la API
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
     final response = await dio.get('/movie/now_playing');
