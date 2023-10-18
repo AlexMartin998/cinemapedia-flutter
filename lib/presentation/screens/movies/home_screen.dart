@@ -50,7 +50,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   @override
   Widget build(BuildContext context) {
     // // riverpod retorna el State: List<Movie> del provider
-    // final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
 
     return Column(
@@ -59,6 +59,12 @@ class _HomeViewState extends ConsumerState<_HomeView> {
         const CustomAppbar(),
 
         MoviesSlideshow(movies: slideShowMovies),
+
+        MovieHorizontalListview(
+          movies: nowPlayingMovies,
+          title: 'En cines',
+          subTitle: 'Lunes 20',
+        ),
 
         /* Expanded( // toma todo el espacio disponible del parent
           child: ListView.builder( // requiere heigth/width fijo
