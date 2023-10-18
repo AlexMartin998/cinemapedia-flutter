@@ -53,66 +53,91 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
 
-    return SingleChildScrollView( // fix screen overflow
-      child: Column(
-    
-        children: [
-          const CustomAppbar(),
-    
-          MoviesSlideshow(movies: slideShowMovies),
-    
-          MovieHorizontalListview(
-            movies: nowPlayingMovies,
-            title: 'En cines',
-            subTitle: 'Lunes 20',
-    
-            loadNextPage: () {
-              // read xq es 1 callback/method/fn/listener
-              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-            },
-          ),
-    
-          MovieHorizontalListview(
-            movies: nowPlayingMovies,
-            title: 'Proximamente',
-            subTitle: 'En este mes',
-    
-            loadNextPage: () {
-              // read xq es 1 callback/method/fn/listener
-              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-            },
-          ),
-    
-          MovieHorizontalListview(
-            movies: nowPlayingMovies,
-            title: 'Populares',
-            subTitle: 'En esta semana',
-    
-            loadNextPage: () {
-              // read xq es 1 callback/method/fn/listener
-              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-            },
-          ),
 
-          const SizedBox(height: 12), // bottom de gracia para q se vea todo bien
+    return CustomScrollView( // fix screen overflow
+      // sliver es 1 Widget q W directamente con el   Scroll
+      slivers: [
 
-          /* Expanded( // toma todo el espacio disponible del parent
-            child: ListView.builder( // requiere heigth/width fijo
-              padding: EdgeInsets.zero, // remove paddings
-              itemCount: nowPlayingMovies.length,
-          
-              itemBuilder: (context, index) {
-                final movie = nowPlayingMovies[index];
-          
-                return ListTile(
-                  title: Text(movie.title),
-                );
-              },
-            ),
-          ), */
-    
-        ],
-      ),
+        const SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            title: CustomAppbar(),
+            titlePadding: EdgeInsets.zero,  // evitar pading en Android
+            centerTitle: false,
+          ),
+        ),
+
+
+        SliverList(
+          // fn q permite crear widgets dentro de esta list
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return Column(
+                children: [
+                  // const CustomAppbar(), // without CustomScrollView
+                  const SizedBox(height: 9),
+                  MoviesSlideshow(movies: slideShowMovies),
+
+                  MovieHorizontalListview(
+                    movies: nowPlayingMovies,
+                    title: 'En cines',
+                    subTitle: 'Lunes 20',
+
+                    loadNextPage: () {
+                      // read xq es 1 callback/method/fn/listener
+                      ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                    },
+                  ),
+
+                  MovieHorizontalListview(
+                    movies: nowPlayingMovies,
+                    title: 'Proximamente',
+                    subTitle: 'En este mes',
+
+                    loadNextPage: () {
+                      // read xq es 1 callback/method/fn/listener
+                      ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                    },
+                  ),
+
+                  MovieHorizontalListview(
+                    movies: nowPlayingMovies,
+                    title: 'Populares',
+                    subTitle: 'En esta semana',
+
+                    loadNextPage: () {
+                      // read xq es 1 callback/method/fn/listener
+                      ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                    },
+                  ),
+
+                  const SizedBox(height: 12), // bottom de gracia para q se vea todo bien
+
+                  /* Expanded( // toma todo el espacio disponible del parent
+                    child: ListView.builder( // requiere heigth/width fijo
+                      padding: EdgeInsets.zero, // remove paddings
+                      itemCount: nowPlayingMovies.length,
+                  
+                      itemBuilder: (context, index) {
+                        final movie = nowPlayingMovies[index];
+                  
+                        return ListTile(
+                          title: Text(movie.title),
+                        );
+                      },
+                    ),
+                  ), */
+
+                ],
+              );
+
+            },
+
+            childCount: 1  // veces q se repite el child
+          ),
+        )
+      ]
+
     );
   }
 }
