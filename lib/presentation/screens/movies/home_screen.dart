@@ -1,4 +1,5 @@
 import 'package:cinema_pedia/presentation/providers/movies/movies_providers.dart';
+import 'package:cinema_pedia/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -49,16 +50,29 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     // riverpod retorna el State: List<Movie> del provider
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
 
-    return ListView.builder(
-      itemCount: nowPlayingMovies.length,
+    return Column(
 
-      itemBuilder: (context, index) {
-        final movie = nowPlayingMovies[index];
+      children: [
+        const CustomAppbar(),
 
-        return ListTile(
-          title: Text(movie.title),
-        );
-      },
+        MoviesSlideshow(movies: nowPlayingMovies),
+
+        /* Expanded( // toma todo el espacio disponible del parent
+          child: ListView.builder( // requiere heigth/width fijo
+            padding: EdgeInsets.zero, // remove paddings
+            itemCount: nowPlayingMovies.length,
+        
+            itemBuilder: (context, index) {
+              final movie = nowPlayingMovies[index];
+        
+              return ListTile(
+                title: Text(movie.title),
+              );
+            },
+          ),
+        ), */
+
+      ],
     );
   }
 }

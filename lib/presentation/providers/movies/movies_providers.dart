@@ -3,6 +3,7 @@ import 'package:cinema_pedia/presentation/providers/movies/movies_repository_pro
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
+// // // Aqui se mantendra el State de 1    List<Movie>
 // // Como este Provider tedremos mas x c/use_case q llamara su propia fn
 // quien maneja el state es el MoviesNotifier, de la data/state q es List<Movie>
 final nowPlayingMoviesProvider = StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
