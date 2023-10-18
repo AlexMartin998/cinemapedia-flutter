@@ -4,11 +4,12 @@ import 'package:cinema_pedia/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 
 
-class MovieHorizontalListview extends StatelessWidget {
+
+class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
   final String? title;
   final String? subTitle;
-  // infinite scroll
+  // infinite scroll: va a ser generico y req 1 Listener <- Statefull widget
   final VoidCallback? loadNextPage;
 
   const MovieHorizontalListview(
@@ -18,7 +19,38 @@ class MovieHorizontalListview extends StatelessWidget {
       this.subTitle,
       this.loadNextPage});
 
+  @override
+  State<MovieHorizontalListview> createState() => _MovieHorizontalListviewState();
+}
 
+
+
+class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
+  final scrollController = ScrollController(); // controla todo 
+
+  // // lifecyle
+  @override
+  void initState() { // ngOnInit() :v
+    super.initState(); // 100pre 1ro
+
+    // se invoca/excecute muchas veces (0.00001) x tasa de refresco screen
+    scrollController.addListener(() {
+      if (widget.loadNextPage == null) return;
+
+      // viene el callback
+      if ((scrollController.position.pixels + 200) >= scrollController.position.maxScrollExtent) {
+        widget.loadNextPage!();
+      }
+    });
+  }
+
+  @override
+  void dispose() { // ngOnDestroy
+    super.dispose();
+    scrollController.dispose(); // todo controller debe ser limpiado
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -26,18 +58,20 @@ class MovieHorizontalListview extends StatelessWidget {
       child: Column(
 
         children: [
-          if (title != null || subTitle != null)
-            _Title(title: title, subTitle: subTitle),
+          // widget nos da acceso a las Props del Widget
+          if (widget.title != null || widget.subTitle != null)
+            _Title(title: widget.title, subTitle: widget.subTitle),
 
           // listView req 1 size especifico
           Expanded(
             child: ListView.builder( // lazy & built in runtime
-              itemCount: movies.length,
+              controller: scrollController,  // infinite scroll
+              itemCount: widget.movies.length,
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(), // rebote ios/android
 
               itemBuilder: (context, index) {
-                return _Slide(movie: movies[index]);
+                return _Slide(movie: widget.movies[index]);
               },
             ),
           ),
