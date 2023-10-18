@@ -30,6 +30,7 @@ typedef MovieCallback = Future<List<Movie>> Function({int page});
 class MoviesNotifier extends StateNotifier<List<Movie>> {
   int currentPage = 0;
   MovieCallback fetchMoreMovies;
+  bool isLoading = false; // prevent multiple req in infinite scroll
 
 
   // al init no tenemos movies, xq no tenemos methods q load form DB
@@ -40,13 +41,20 @@ class MoviesNotifier extends StateNotifier<List<Movie>> {
 
   // load next page y mantenerlas en memoria
   Future<void> loadNextPage() async {
+    if (isLoading) return;
+
+    isLoading = true;
     currentPage++;
 
     // obtengo las nuevas pelis con esta fn
     final List<Movie> movies = await fetchMoreMovies(page: currentPage);
-    
+    // dar loading entre c/req y el cambio state
+    await Future.delayed(const Duration(milliseconds: 540));
+
     // como cambia el state, Riverpod Notifica en auto
     state = [...state, ...movies]; // cambio state basado en prev state
+
+    isLoading = false;
   }
 
 }

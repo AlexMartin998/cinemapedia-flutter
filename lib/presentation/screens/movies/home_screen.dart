@@ -53,40 +53,66 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
 
-    return Column(
-
-      children: [
-        const CustomAppbar(),
-
-        MoviesSlideshow(movies: slideShowMovies),
-
-        MovieHorizontalListview(
-          movies: nowPlayingMovies,
-          title: 'En cines',
-          subTitle: 'Lunes 20',
-
-          loadNextPage: () {
-            // read xq es 1 callback/method/fn/listener
-            ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-          },
-        ),
-
-        /* Expanded( // toma todo el espacio disponible del parent
-          child: ListView.builder( // requiere heigth/width fijo
-            padding: EdgeInsets.zero, // remove paddings
-            itemCount: nowPlayingMovies.length,
-        
-            itemBuilder: (context, index) {
-              final movie = nowPlayingMovies[index];
-        
-              return ListTile(
-                title: Text(movie.title),
-              );
+    return SingleChildScrollView( // fix screen overflow
+      child: Column(
+    
+        children: [
+          const CustomAppbar(),
+    
+          MoviesSlideshow(movies: slideShowMovies),
+    
+          MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: 'En cines',
+            subTitle: 'Lunes 20',
+    
+            loadNextPage: () {
+              // read xq es 1 callback/method/fn/listener
+              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
             },
           ),
-        ), */
+    
+          MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: 'Proximamente',
+            subTitle: 'En este mes',
+    
+            loadNextPage: () {
+              // read xq es 1 callback/method/fn/listener
+              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+            },
+          ),
+    
+          MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: 'Populares',
+            subTitle: 'En esta semana',
+    
+            loadNextPage: () {
+              // read xq es 1 callback/method/fn/listener
+              ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+            },
+          ),
 
-      ],
+          const SizedBox(height: 12), // bottom de gracia para q se vea todo bien
+
+          /* Expanded( // toma todo el espacio disponible del parent
+            child: ListView.builder( // requiere heigth/width fijo
+              padding: EdgeInsets.zero, // remove paddings
+              itemCount: nowPlayingMovies.length,
+          
+              itemBuilder: (context, index) {
+                final movie = nowPlayingMovies[index];
+          
+                return ListTile(
+                  title: Text(movie.title),
+                );
+              },
+            ),
+          ), */
+    
+        ],
+      ),
     );
   }
 }
