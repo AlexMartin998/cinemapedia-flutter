@@ -5,3 +5,4 @@ export 'package:cinema_pedia/presentation/widgets/movies/movie_horizontal_listvi
 export 'package:cinema_pedia/presentation/widgets/movies/movies_slideshow.dart';
 export 'package:cinema_pedia/presentation/widgets/shared/custom_appbar.dart';
 export 'package:cinema_pedia/presentation/widgets/shared/custom_bottom_navigationbar.dart';
+export 'package:cinema_pedia/presentation/widgets/shared/full_screen_loader.dart';
