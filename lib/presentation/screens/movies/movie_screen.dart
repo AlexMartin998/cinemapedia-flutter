@@ -1,5 +1,6 @@
 import 'package:cinema_pedia/domain/entities/movie.dart';
 import 'package:cinema_pedia/presentation/providers/movies/movie_info_provider.dart';
+import 'package:cinema_pedia/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -28,7 +29,9 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
   void initState() { // ngOnInit() :v
     super.initState();
 
+    // disparan las   http req   con la clean arch
     ref.read(movieInfoProvider.notifier).loadMovie(widget.movieId);
+    ref.read(actorsByMoviePorivder.notifier).loadActors(widget.movieId);
   }
 
 
@@ -92,11 +95,11 @@ class _CustomSliverAppBar extends StatelessWidget {
         titlePadding: const EdgeInsets.fromLTRB(12, 0, 0, 12),
         centerTitle: false,
         
-        title: Text(
+        /* title: Text(
           movie.title,
           style: const TextStyle(fontSize: 20),
           textAlign: TextAlign.start,
-        ),
+        ), */
 
         background: Stack( // 1 sobre otro
           children: [
@@ -212,13 +215,82 @@ class _MovieDetails extends StatelessWidget {
         ),
 
 
-
         /* actors */
+        _ActorsByMovie(movieId: movie.id.toString()),
+
+
 
         // ensure visibility (just margin)
-        const SizedBox(height: 100),
+        const SizedBox(height: 24),
       ],
     );
   }
 }
 
+
+
+// riverpod provider consumer stateless
+class _ActorsByMovie extends ConsumerWidget {
+  final String movieId;
+
+  const _ActorsByMovie({required this.movieId});
+
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // trhough provider (state): <Map<String, List<Actor>>
+    final actors = ref.watch(actorsByMoviePorivder)[movieId];
+    if(actors == null) { // loading actors 'cause all movies have actors
+      return const Center(
+        child: CircularProgressIndicator(strokeWidth: 2),
+      );
+    }
+
+    // como evaluo con el loader se q aqui ya tengo actores
+    return SizedBox(
+      height: 300,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(), // rebote ios/android
+        itemCount: actors.length,
+
+        itemBuilder: (context, index) {
+          final actor = actors[index];
+
+          return Container(
+            padding: const EdgeInsets.all(8),
+            width: 135,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: [
+                /* image */
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    actor.profilePath,
+                    height: 180,
+                    width: 135,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(height: 5),
+
+                /* name */
+                Text(actor.name, maxLines: 2),
+                Text(actor.character ?? '',
+                  maxLines: 2,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    // >2 lines: ...
+                    overflow: TextOverflow.ellipsis
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

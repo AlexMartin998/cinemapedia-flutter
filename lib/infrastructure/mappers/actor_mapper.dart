@@ -10,7 +10,7 @@ class ActorMapper {
 
     profilePath: cast.profilePath != null 
       ? 'https://image.tmdb.org/t/p/w500/${cast.profilePath}'
-      : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcGJegujCz3neLg3btfiVRfmV4dg52BBd38g&usqp=CAU',
+      : 'https://www.iprcenter.gov/image-repository/blank-profile-picture.png/@@images/image.png',
 
     character: cast.character,
   );

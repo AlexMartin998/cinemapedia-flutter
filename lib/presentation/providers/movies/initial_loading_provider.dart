@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'movies_providers.dart';
 
 
+// // // Provider para el loading general del Home
+// // indica q todos tengan data
 // solo lectura: solo quiero saber si esta en true/false
 final initialLoadingProvider = Provider<bool>((ref) {
   final bool step1 = ref.watch(nowPlayingMoviesProvider).isEmpty;
