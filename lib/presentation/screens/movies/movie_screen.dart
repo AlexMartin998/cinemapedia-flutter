@@ -52,7 +52,11 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
           /* AppBar */
           _CustomSliverAppBar(movie: movie), // must be a Sliver
 
-          /*  */
+          /* Movie Details */
+          SliverList(delegate: SliverChildBuilderDelegate(
+            (context, index) => _MovieDetails(movie: movie),
+            childCount: 1, // veces q se repite el content
+          )),
         ],
       ),
     );
@@ -78,10 +82,10 @@ class _CustomSliverAppBar extends StatelessWidget {
       foregroundColor: Colors.white,
 
       // same goBack btn
-      // leading: IconButton(
-      //   onPressed: (){context.pop();}, // pop() <- go_router
-      //   icon: const Icon(Icons.arrow_back_ios_new_outlined)
-      // ),
+      leading: IconButton(
+        onPressed: (){context.pop();}, // pop() <- go_router
+        icon: const Icon(Icons.arrow_back_ios_new_outlined)
+      ),
       
       // content
       flexibleSpace: FlexibleSpaceBar(
@@ -141,3 +145,80 @@ class _CustomSliverAppBar extends StatelessWidget {
     );
   }
 }
+
+
+
+class _MovieDetails extends StatelessWidget {
+  final Movie movie;
+
+  const _MovieDetails({required this.movie});
+
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final textStyles = Theme.of(context).textTheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(9),
+
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(21),
+                child: Image.network(
+                  movie.posterPath,
+                  width: size.width * .3,
+                ),
+              ),
+              const SizedBox(width: 10),
+
+              /* description */
+              SizedBox(
+                width: (size.width - 40) * .7,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(movie.title, style: textStyles.titleLarge),
+                    Text(movie.overview),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        /* genres */
+        // TODO: navigate to gender
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Wrap( // children aligned to the start
+            children: [
+              ...movie.genreIds.map((gender) => Container(
+                margin: const EdgeInsets.only(right: 10),
+                child: Chip(
+                  label: Text(gender),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                ),
+              )),
+            ],
+          ),
+        ),
+
+
+
+        /* actors */
+
+        // ensure visibility (just margin)
+        const SizedBox(height: 100),
+      ],
+    );
+  }
+}
+
