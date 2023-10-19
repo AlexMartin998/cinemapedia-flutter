@@ -28,16 +28,33 @@ class MoviedbDatasource extends MoviesDataSource {
         'page': page
       }
     );
-    
-    final movieDBResponse = MovieDbResponse.fromJson(response.data);
-    
+
+    return _jsonToMovies(response.data);
+  }
+
+
+  @override
+  Future<List<Movie>> getPopular({int page = 1}) async {
+    final response = await dio.get(
+      '/movie/popular', 
+      queryParameters: {
+        'page': page
+      }
+    );
+
+    return _jsonToMovies(response.data);
+  }
+
+
+  List<Movie> _jsonToMovies(Map<String, dynamic> jsonData) {
+    final movieDBResponse = MovieDbResponse.fromJson(jsonData);
+
     final List<Movie> movies = movieDBResponse.results
-      // al ser 1 regla de negocio deberia estar el domain, pero como??? :v
-      .where((movieDb) => movieDb.posterPath != 'no-poster')
-      .map(
-        (movieDb) => MovieMapper.movieDBToEntity(movieDb)
-      ).toList();
-    
+    // al ser 1 regla de negocio deberia estar el domain, pero como??? :v
+    .where((movieDb) => movieDb.posterPath != 'no-poster')
+    .map(
+      (movieDb) => MovieMapper.movieDBToEntity(movieDb)
+    ).toList();
 
     return movies;
   }

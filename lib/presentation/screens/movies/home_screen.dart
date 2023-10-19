@@ -44,6 +44,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     // // este notifier ya tien todo, aqui no me interesa nada mas q llamarlo
     // inicia la   req   con toda la clean arch
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(); // dentro de 1 method uso read() y NOOO watch
+    ref.read(popularMoviesProvider.notifier).loadNextPage(); // dentro de 1 method uso read() y NOOO watch
   }
 
 
@@ -52,6 +53,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     // // riverpod retorna el State: List<Movie> del provider
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
+    final popularMovies = ref.watch(popularMoviesProvider);
 
 
     return CustomScrollView( // fix screen overflow
@@ -89,10 +91,11 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                     },
                   ),
 
+                  /* Coming soon */
                   MovieHorizontalListview(
                     movies: nowPlayingMovies,
-                    title: 'Proximamente',
-                    subTitle: 'En este mes',
+                    title: 'Próximamente',
+                    subTitle: 'Lunes 20',
 
                     loadNextPage: () {
                       // read xq es 1 callback/method/fn/listener
@@ -100,6 +103,19 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                     },
                   ),
 
+                  /* Popular */
+                  MovieHorizontalListview(
+                    movies: popularMovies,
+                    title: 'Populares',
+                    subTitle: 'En este mes',
+
+                    loadNextPage: () {
+                      // read xq es 1 callback/method/fn/listener
+                      ref.read(popularMoviesProvider.notifier).loadNextPage();
+                    },
+                  ),
+
+                  /* Most viewed */
                   MovieHorizontalListview(
                     movies: nowPlayingMovies,
                     title: 'Populares',
