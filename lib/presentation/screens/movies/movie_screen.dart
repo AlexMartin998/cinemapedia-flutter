@@ -2,6 +2,7 @@ import 'package:cinema_pedia/domain/entities/movie.dart';
 import 'package:cinema_pedia/presentation/providers/movies/movie_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 
 
@@ -43,10 +44,99 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
     }
 
 
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text('MovieID: ${widget.movieId}'),
+      body: CustomScrollView(
+        physics: const ClampingScrollPhysics(), // remueve rebote ios/android
+
+        slivers: [ // W con el comportamiento del Scroll
+          /* AppBar */
+          _CustomSliverAppBar(movie: movie), // must be a Sliver
+
+          /*  */
+        ],
+      ),
+    );
+  }
+}
+
+
+
+class _CustomSliverAppBar extends StatelessWidget {
+  final Movie movie;
+
+  const _CustomSliverAppBar({required this.movie});
+
+
+  @override
+  Widget build(BuildContext context) {
+    // size real del mobile
+    final size = MediaQuery.of(context).size;
+
+    return SliverAppBar(
+      backgroundColor: Colors.black,
+      expandedHeight: size.height * 0.7,
+      foregroundColor: Colors.white,
+
+      // same goBack btn
+      // leading: IconButton(
+      //   onPressed: (){context.pop();}, // pop() <- go_router
+      //   icon: const Icon(Icons.arrow_back_ios_new_outlined)
+      // ),
+      
+      // content
+      flexibleSpace: FlexibleSpaceBar(
+        titlePadding: const EdgeInsets.fromLTRB(12, 0, 0, 12),
+        centerTitle: false,
+        
+        title: Text(
+          movie.title,
+          style: const TextStyle(fontSize: 20),
+          textAlign: TextAlign.start,
+        ),
+
+        background: Stack( // 1 sobre otro
+          children: [
+            SizedBox.expand(
+              child: Image.network(
+                movie.posterPath,
+                fit: BoxFit.cover,
+              ),
+            ),
+
+            /* gradient */
+            const SizedBox.expand( // take all space
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    // de arriba abajo
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [0.7, 1.0],
+                    colors: [
+                      Colors.transparent,
+                      Colors.black87
+                    ]
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox.expand( // take all space
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    stops: [0.0, 0.3],
+                    colors: [
+                      Colors.black87,
+                      Colors.transparent,
+                    ]
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        
       ),
     );
   }
