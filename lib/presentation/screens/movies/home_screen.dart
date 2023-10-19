@@ -94,6 +94,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                     // const CustomAppbar(), // without CustomScrollView
                     const SizedBox(height: 9),
                     MoviesSlideshow(movies: slideShowMovies),
+                    const SizedBox(height: 15),
     
                     /* Now playing */
                     MovieHorizontalListview(
