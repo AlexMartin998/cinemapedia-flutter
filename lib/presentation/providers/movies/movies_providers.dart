@@ -8,7 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // quien maneja el state es el MoviesNotifier, de la data/state q es List<Movie>
 final nowPlayingMoviesProvider = StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
   
-  // method d nuestro Repo q es quien llama al datasource q realmente hace la Req Http
+  // // method d nuestro Repo q es quien llama al datasource q realmente hace la Req Http
+  // se pasa la referencia al method, NO se invoca aqui
   final fetchMoreMovies = ref.watch(movieRepositoryProvider).getNowPlaying;
 
 
@@ -27,6 +28,15 @@ final popularMoviesProvider = StateNotifierProvider<MoviesNotifier, List<Movie>>
   );
 });
 
+final upComingMoviesProvider = StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getUpcoming;
+  return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+});
+
+final topRatedMoviesProvider = StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getTopRated;
+  return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+});
 
 
 
