@@ -166,7 +166,7 @@ class ProductionCompany {
 
     ProductionCompany({
         required this.id,
-        required this.logoPath,
+        this.logoPath,
         required this.name,
         required this.originCountry,
     });

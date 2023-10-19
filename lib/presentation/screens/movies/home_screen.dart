@@ -33,7 +33,7 @@ class _HomeView extends ConsumerStatefulWidget {
 }
 
 
-// ConsumerState tiene acceso al   ref   sin necesitad de pasarlo x el builder
+// ConsumerState tiene acceso al   ref   sin necesidad de pasarlo x el builder <- Riverpod
 class _HomeViewState extends ConsumerState<_HomeView> {
 
   // // lifecycle
