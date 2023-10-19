@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cinema_pedia/config/helpers/human_formats.dart';
 import 'package:cinema_pedia/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 
 
@@ -113,7 +114,14 @@ class _Slide extends StatelessWidget {
                 width: 150,  // like skeleton to prevent splits
                 fit: BoxFit.cover,
                 loadingBuilder: (context, child, loadingProgress) {
-                  if(loadingProgress == null) return FadeIn(child: child);
+                  if (loadingProgress == null) {
+                    return GestureDetector( // detectar gestos con la screen (taps)
+                      // mobile: return xq esta como children route
+                      onTap: () => context.go('/movie/${movie.id}'), // deeplinking web
+                      child: FadeIn(child: child),
+                    );
+                  }
+                  
                   
                   return const Padding(
                     padding: EdgeInsets.symmetric(vertical: 21),
