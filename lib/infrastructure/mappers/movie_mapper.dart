@@ -24,9 +24,11 @@ class MovieMapper {
 
         posterPath: (movieDB.posterPath != '')
           ? 'https://image.tmdb.org/t/p/w500/${movieDB.posterPath}'
-          : 'no-poster',
+          : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6V_R6WMnHzN5bpexR-vQ1tNickx9phBGTHA&usqp=CAU',
 
-        releaseDate: movieDB.releaseDate,
+        // just to correct the issue and prevent to modify entity
+        releaseDate: movieDB.releaseDate != null ? movieDB.releaseDate! : DateTime.now(),
+
         title: movieDB.title,
         video: movieDB.video,
         voteAverage: movieDB.voteAverage,

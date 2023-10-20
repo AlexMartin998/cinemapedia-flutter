@@ -1,12 +1,18 @@
+import 'package:cinema_pedia/domain/entities/movie.dart';
+import 'package:cinema_pedia/presentation/delegates/search_movie_delegate.dart';
+import 'package:cinema_pedia/presentation/providers/movies/movies_repository_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 
-class CustomAppbar extends StatelessWidget {
+// stateless -> ConsumerWidget | stateful -> ConsumerStatefulWidget  <-- Riverpod
+class CustomAppbar extends ConsumerWidget {
   const CustomAppbar({super.key});
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final color = Theme.of(context).colorScheme;
     final titleStyle = Theme.of(context).textTheme.titleMedium;
 
@@ -25,7 +31,23 @@ class CustomAppbar extends StatelessWidget {
 
               const Spacer(), // like flex 1
               IconButton(
-                onPressed: (){},
+                onPressed: () {
+                  // // read on callbacks/listeners/onSomething
+                  // uso directo el movieRepo xq no estoy W con el StateNotifierProvider
+                  final movieRepository = ref.read(movieRepositoryProvider);
+
+                  // // SearchDelegate: moview opt xq se puede salir sin la movie
+                  showSearch<Movie?>( // nos lo da flutter
+                    context: context,
+                    delegate: SearchMovieDelegate( // encargado de W la Busqueda
+                      seachMovies: movieRepository.searchMovies
+                    )
+                  ).then((movie) {
+                    // NUNCA usar el    context   dentro de 1  async xq este puede cambiar sin q nos demos cuenta
+                    if (movie == null) return;
+                    context.push('/movie/${movie.id}');
+                  });
+                },
                 icon: const Icon(Icons.search)
               ),
             ],
