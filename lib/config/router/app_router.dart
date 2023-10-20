@@ -46,6 +46,10 @@ final appRouter = GoRouter(
     ),
 
 
+    // // podriamos crear otras Parent Routes q se SALGAN del   ShellRoute
+    // asi NO estaria siempre el BottomNavigationBar
+
+
     /* ** Rutas normales: Padre/Hijo
     GoRoute(
       path: '/',
