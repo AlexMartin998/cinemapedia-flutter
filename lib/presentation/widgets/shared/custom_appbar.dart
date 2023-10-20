@@ -1,6 +1,7 @@
 import 'package:cinema_pedia/domain/entities/movie.dart';
 import 'package:cinema_pedia/presentation/delegates/search_movie_delegate.dart';
 import 'package:cinema_pedia/presentation/providers/movies/movies_repository_provider.dart';
+import 'package:cinema_pedia/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -36,11 +37,19 @@ class CustomAppbar extends ConsumerWidget {
                   // uso directo el movieRepo xq no estoy W con el StateNotifierProvider
                   final movieRepository = ref.read(movieRepositoryProvider);
 
+                  final searchQuery = ref.read(searchQueryProvider); // return state
+
+
                   // // SearchDelegate: moview opt xq se puede salir sin la movie
                   showSearch<Movie?>( // nos lo da flutter
+                    query: searchQuery, // mantener state del Search (only Query)
                     context: context,
+
                     delegate: SearchMovieDelegate( // encargado de W la Busqueda
-                      searchMovies: movieRepository.searchMovies
+                      searchMovies: (query) {
+                        ref.read(searchQueryProvider.notifier).state = query;
+                        return movieRepository.searchMovies(query);
+                      }
                     )
                   ).then((movie) {
                     // NUNCA usar el    context   dentro de 1  async xq este puede cambiar sin q nos demos cuenta
