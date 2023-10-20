@@ -19,17 +19,24 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
   Timer? _debounceTimer; // like setTimeOut()
 
+  // // isLoadin icon
+  StreamController<bool> isLoadingStream = StreamController.broadcast();
+
+
   SearchMovieDelegate({
     required this.searchMovies,
     required this.initialMovies,
   });
 
+
   // // debounce
-  void crearStreams() {
+  void clearStreams() {
     debouncedMovies.close();
   }
 
   void _onQueryChanged(String query) {
+    isLoadingStream.add(true); // setear valires en el stream
+
     if (_debounceTimer?.isActive ?? false) {
       _debounceTimer!.cancel();
     } // clean timer
@@ -39,6 +46,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
         final movies = await searchMovies(query);
         initialMovies = movies; // para el buildResults
         debouncedMovies.add(movies);
+        isLoadingStream.add(false);
       }
     );
   }
@@ -62,7 +70,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
             movie: movies[index],
             
             onMovieSelected: (context, movie) {
-              crearStreams(); // limpiar los streams
+              clearStreams(); // limpiar los streams
               close(context, movie);
             }, // global in SearchDelegate
           ),
@@ -80,15 +88,34 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   List<Widget>? buildActions(BuildContext context) {
     
     return [
-      FadeIn(
-        animate: query.isNotEmpty, // like ifazo
-        child: IconButton(
-          // query nos lo da el SearchDelegate
-          onPressed: () => query = '', // limpio el input
-      
-          icon: const Icon(Icons.clear),
-        ),
+      StreamBuilder(
+        stream: isLoadingStream.stream,
+        builder: (context, snapshot) {
+          if (snapshot.data ?? false) {
+            return SpinPerfect(
+              infinite: true,
+              duration: const Duration(seconds: 2),
+              child: IconButton(
+                // query nos lo da el SearchDelegate
+                onPressed: () => query = '', // limpio el input
+
+                icon: const Icon(Icons.refresh_rounded),
+              ),
+            );
+          }
+          
+          return FadeIn(
+            animate: query.isNotEmpty, // like ifazo
+            child: IconButton(
+              // query nos lo da el SearchDelegate
+              onPressed: () => query = '', // limpio el input
+        
+              icon: const Icon(Icons.clear),
+            ),
+          );
+        },
       ),
+
     ];
   }
 
@@ -99,7 +126,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
       // close gracias al SearchDelegate (ctx, result): result es lo q se retorna al cerrar
       // como es el leading para go back, no retorno nada
       onPressed: () {
-        crearStreams(); // limpiar los streams
+        clearStreams(); // limpiar los streams
         close(context, null);
       },
       
