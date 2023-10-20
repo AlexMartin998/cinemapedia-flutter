@@ -12,7 +12,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   // viene de nuestro repository provider 
   final SearchMoviesCallback searchMovies;
-  final List<Movie> initialMovies; // searchedMovies
+  List<Movie> initialMovies; // searchedMovies || 
 
   // // debounce
   // .broadcast() varios listeners: c/re-render se vuelve a subscribir
@@ -37,56 +37,18 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async { 
         // fetch movies & emit them to Stream
         final movies = await searchMovies(query);
+        initialMovies = movies; // para el buildResults
         debouncedMovies.add(movies);
       }
     );
   }
 
-
-  @override
-  String get searchFieldLabel => 'Buscar película';
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    
-    return [
-      FadeIn(
-        animate: query.isNotEmpty, // like ifazo
-        child: IconButton(
-          // query nos lo da el SearchDelegate
-          onPressed: () => query = '', // limpio el input
-      
-          icon: const Icon(Icons.clear),
-        ),
-      ),
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) { // leading like icon
-    return IconButton(
-      // close gracias al SearchDelegate (ctx, result): result es lo q se retorna al cerrar
-      // como es el leading para go back, no retorno nada
-      onPressed: () {
-        crearStreams(); // limpiar los streams
-        close(context, null);
-      },
-      
-      icon: const Icon(Icons.arrow_back_ios_new_outlined),
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return const Text('buildResults');
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    _onQueryChanged(query); // debounce
-    
+  // // centralizar la logica: DRY
+  Widget _buildResultsAndSuggestions() {
     return StreamBuilder(
       // future: seachMovies(query), // dispara la req
+
+      // results: tengo q seguir escuchando el stream para tener data al ahcer enter rapido (dentro del timer)
       initialData: initialMovies, // searchedMovies (avoid loading)
       stream: debouncedMovies.stream,
 
@@ -107,6 +69,57 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
         );
       },
     );
+  }
+
+
+  @override
+  String get searchFieldLabel => 'Buscar película';
+
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    
+    return [
+      FadeIn(
+        animate: query.isNotEmpty, // like ifazo
+        child: IconButton(
+          // query nos lo da el SearchDelegate
+          onPressed: () => query = '', // limpio el input
+      
+          icon: const Icon(Icons.clear),
+        ),
+      ),
+    ];
+  }
+
+
+  @override
+  Widget? buildLeading(BuildContext context) { // leading like icon
+    return IconButton(
+      // close gracias al SearchDelegate (ctx, result): result es lo q se retorna al cerrar
+      // como es el leading para go back, no retorno nada
+      onPressed: () {
+        crearStreams(); // limpiar los streams
+        close(context, null);
+      },
+      
+      icon: const Icon(Icons.arrow_back_ios_new_outlined),
+    );
+  }
+
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // deberian ser las mismas suggestions
+    return _buildResultsAndSuggestions();
+  }
+
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    _onQueryChanged(query); // debouncer
+    
+    return _buildResultsAndSuggestions();
   }
 
 }
