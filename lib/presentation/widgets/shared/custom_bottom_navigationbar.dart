@@ -3,34 +3,12 @@ import 'package:go_router/go_router.dart';
 
 
 class CustomBottomNavigation extends StatelessWidget {
-  const CustomBottomNavigation({super.key});
+  final StatefulNavigationShell navigationShell;
 
-  int _getCurrentIndex(BuildContext context) {
-    final String location = GoRouterState.of(context).fullPath ?? '/';
-    switch(location) {
-      case '/':
-        return 0;
-      case '/categories':
-        return 1;
-      case '/favorites':
-        return 2;
-      default:
-        return 0;
-    }
-  }
+  const CustomBottomNavigation({super.key, required this.navigationShell});
 
-  void onDestinationSelected(BuildContext context, int index) {
-    switch(index) {
-      case 0:
-        context.go('/');
-        break;
-      case 1:
-        context.go('/');
-        break;
-      case 2:
-        context.go('/favorites');
-        break;
-    }
+  void onDestinationSelected(int index) {
+    navigationShell.goBranch(index);
   }
 
 
@@ -41,8 +19,9 @@ class CustomBottomNavigation extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
 
       // like onTap
-      onDestinationSelected: (value) => onDestinationSelected(context, value),
-      selectedIndex: _getCurrentIndex(context),
+      // onDestinationSelected: (value) => onDestinationSelected(value),
+      onDestinationSelected: onDestinationSelected,
+      selectedIndex: navigationShell.currentIndex,
 
       destinations: const [
         NavigationDestination(
