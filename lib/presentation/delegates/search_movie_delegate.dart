@@ -1,8 +1,9 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+
 import 'package:cinema_pedia/config/helpers/human_formats.dart';
 import 'package:cinema_pedia/domain/entities/movie.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 
 typedef SearchMoviesCallback = Future<List<Movie>> Function(String query);
@@ -10,11 +11,39 @@ typedef SearchMoviesCallback = Future<List<Movie>> Function(String query);
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   // viene de nuestro repository provider 
-  final SearchMoviesCallback seachMovies;
+  final SearchMoviesCallback searchMovies;
+
+  // // debounce
+  // .broadcast() varios listeners: c/re-render se vuelve a subscribir
+  StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
+  Timer? _debounceTimer; // like setTimeOut()
 
   SearchMovieDelegate({
-    required this.seachMovies,
+    required this.searchMovies,
   });
+
+  // // debounce
+  void crearStreams() {
+    debouncedMovies.close();
+  }
+
+  void _onQueryChanged(String query) {
+    if (_debounceTimer?.isActive ?? false) {
+      _debounceTimer!.cancel();
+    } // clean timer
+
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async { 
+        // fetch movies & emit them to Stream
+        if (query.isEmpty) {
+          debouncedMovies.add([]);
+          return;
+        }
+
+        final movies = await searchMovies(query);
+        debouncedMovies.add(movies);
+      }
+    );
+  }
 
 
   @override
@@ -41,7 +70,10 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     return IconButton(
       // close gracias al SearchDelegate (ctx, result): result es lo q se retorna al cerrar
       // como es el leading para go back, no retorno nada
-      onPressed: () => close(context, null),
+      onPressed: () {
+        crearStreams(); // limpiar los streams
+        close(context, null);
+      },
       
       icon: const Icon(Icons.arrow_back_ios_new_outlined),
     );
@@ -54,9 +86,11 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    _onQueryChanged(query); // debounce
     
-    return FutureBuilder(
-      future: seachMovies(query), // dispara la req
+    return StreamBuilder(
+      // future: seachMovies(query), // dispara la req
+      stream: debouncedMovies.stream,
 
       builder: (context, snapshot) { // snapshot sabe lo q fluye
         final movies = snapshot.data ?? [];
@@ -66,7 +100,11 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
           itemBuilder: (context, index) => _MovieItem(
             movie: movies[index],
-            onMovieSelected: close, // global in SearchDelegate
+            
+            onMovieSelected: (context, movie) {
+              crearStreams(); // limpiar los streams
+              close(context, movie);
+            }, // global in SearchDelegate
           ),
         );
       },
@@ -79,7 +117,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
 class _MovieItem extends StatelessWidget {
   final Movie movie;
-  final Function onMovieSelected;
+  final Function onMovieSelected; // xq aqui no tengo el close()
 
   const _MovieItem({required this.movie, required this.onMovieSelected});
 

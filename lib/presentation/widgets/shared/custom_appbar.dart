@@ -40,7 +40,7 @@ class CustomAppbar extends ConsumerWidget {
                   showSearch<Movie?>( // nos lo da flutter
                     context: context,
                     delegate: SearchMovieDelegate( // encargado de W la Busqueda
-                      seachMovies: movieRepository.searchMovies
+                      searchMovies: movieRepository.searchMovies
                     )
                   ).then((movie) {
                     // NUNCA usar el    context   dentro de 1  async xq este puede cambiar sin q nos demos cuenta
