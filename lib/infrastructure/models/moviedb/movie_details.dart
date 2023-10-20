@@ -55,13 +55,13 @@ class MovieDetails {
 
     factory MovieDetails.fromJson(Map<String, dynamic> json) => MovieDetails(
         adult: json["adult"],
-        backdropPath: json["backdrop_path"],
+        backdropPath: json["backdrop_path"] ?? '',
         belongsToCollection: json["belongs_to_collection"] != null ? BelongsToCollection.fromJson(json["belongs_to_collection"]) : null,
         budget: json["budget"],
         genres: List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x))),
         homepage: json["homepage"],
         id: json["id"],
-        imdbId: json["imdb_id"],
+        imdbId: json["imdb_id"] ?? '',
         originalLanguage: json["original_language"],
         originalTitle: json["original_title"],
         overview: json["overview"],

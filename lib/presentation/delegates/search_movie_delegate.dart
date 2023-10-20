@@ -12,6 +12,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   // viene de nuestro repository provider 
   final SearchMoviesCallback searchMovies;
+  final List<Movie> initialMovies; // searchedMovies
 
   // // debounce
   // .broadcast() varios listeners: c/re-render se vuelve a subscribir
@@ -20,6 +21,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   SearchMovieDelegate({
     required this.searchMovies,
+    required this.initialMovies,
   });
 
   // // debounce
@@ -34,11 +36,6 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async { 
         // fetch movies & emit them to Stream
-        if (query.isEmpty) {
-          debouncedMovies.add([]);
-          return;
-        }
-
         final movies = await searchMovies(query);
         debouncedMovies.add(movies);
       }
@@ -90,6 +87,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     
     return StreamBuilder(
       // future: seachMovies(query), // dispara la req
+      initialData: initialMovies, // searchedMovies (avoid loading)
       stream: debouncedMovies.stream,
 
       builder: (context, snapshot) { // snapshot sabe lo q fluye
