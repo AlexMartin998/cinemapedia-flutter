@@ -56,6 +56,7 @@ class IsarDatasource implements  LocalStorageDatasource {
     // // Transactions: we can set severals operation in 1 Txn
     if (favoriteMovie != null) {
       isar.writeTxnSync(() => isar.movies.deleteSync(favoriteMovie.isarId));
+      return;
     }
 
     // insert
