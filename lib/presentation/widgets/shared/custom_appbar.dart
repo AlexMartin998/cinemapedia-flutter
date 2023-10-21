@@ -51,7 +51,7 @@ class CustomAppbar extends ConsumerWidget {
                   ).then((movie) {
                     // NUNCA usar el    context   dentro de 1  async xq este puede cambiar sin q nos demos cuenta
                     if (movie == null) return;
-                    context.push('/home/0/movie/${movie.id}');
+                    context.push('/movie/${movie.id}');
                   });
                 },
                 icon: const Icon(Icons.search)

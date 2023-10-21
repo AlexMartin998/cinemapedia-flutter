@@ -119,7 +119,7 @@ class _Slide extends StatelessWidget {
                       // mobile: return xq esta como children route
                       // without IndexedStack to keepAlive state
                       // onTap: () => context.go('/movie/${movie.id}'), // deeplinking web
-                      onTap: () => context.go('/home/0/movie/${movie.id}'), // deeplinking web
+                      onTap: () => context.go('/movie/${movie.id}'), // deeplinking web
                       child: FadeIn(child: child),
                     );
                   }
