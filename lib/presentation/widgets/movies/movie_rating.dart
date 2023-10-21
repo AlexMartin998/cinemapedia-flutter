@@ -6,12 +6,10 @@ import 'package:cinema_pedia/config/helpers/human_formats.dart';
 class MovieRating extends StatelessWidget {
 
   final double voteAverage; 
-  final double popularity; 
 
   const MovieRating({
     super.key,
     required this.voteAverage,
-    required this.popularity
   });
 
 
@@ -28,16 +26,10 @@ class MovieRating extends StatelessWidget {
           Icon(Icons.star_half_outlined, color: Colors.yellow.shade800),
           const SizedBox(width: 3),
           Text(
-            '$voteAverage',
+            HumanFormats.number(voteAverage, 1),
             style: textStyles.bodyMedium?.copyWith(color: Colors.yellow.shade800)
           ),
-    
-          const Spacer(),
-
-          Text(
-            HumanFormats.number(popularity),
-            style: textStyles.bodySmall,
-          )
+          
         ],
       ),
     );
