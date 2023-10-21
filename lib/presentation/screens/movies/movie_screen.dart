@@ -93,12 +93,16 @@ class _CustomSliverAppBar extends ConsumerWidget {
     // size real del mobile
     final size = MediaQuery.of(context).size;
 
+    // customize gradients
+    // final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+
+
     return SliverAppBar(
       backgroundColor: Colors.black,
       expandedHeight: size.height * 0.7,
       foregroundColor: Colors.white,
 
-      // I Like it Btn
+      // // I Like it Btn
       actions: [
         IconButton(
           onPressed: () async {
@@ -150,17 +154,8 @@ class _CustomSliverAppBar extends ConsumerWidget {
               ),
             ),
 
-            /* gradient */
-            const _CustomGradient(
-              // de arriba abajo
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.75, 1.0],
-              colors: [
-                Colors.transparent,
-                Colors.black87
-              ]
-            ),
+            /* ** Gradient ** */
+            // // Favorite gradient
             const _CustomGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
@@ -170,6 +165,7 @@ class _CustomSliverAppBar extends ConsumerWidget {
                 Colors.transparent,
               ]
             ),
+            // // Back arrow gradient
             const _CustomGradient(
               begin: Alignment.topLeft,
               stops: [0.0, 0.3],
@@ -178,7 +174,20 @@ class _CustomSliverAppBar extends ConsumerWidget {
                 Colors.transparent,
               ]
             ),
-          
+
+            // // Bottom
+            const _CustomGradient(
+              // de arriba abajo
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.75, 1.0],
+              colors: [
+                Colors.transparent,
+                Colors.black87,
+                // scaffoldBackgroundColor // same color of theme
+              ]
+            ),
+            
           ],
         ),
         
@@ -234,7 +243,6 @@ class _MovieDetails extends StatelessWidget {
         ),
 
         /* genres */
-        // TODO: navigate to gender
         Padding(
           padding: const EdgeInsets.all(8),
           child: Wrap( // children aligned to the start

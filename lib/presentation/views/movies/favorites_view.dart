@@ -51,7 +51,7 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
           Icon(Icons.favorite_outline_sharp, size: 60, color: color.primary),
           Text('Ohh no!', style: TextStyle(fontSize: 30, color: color.primary)),
           const Text('No tienes peliculas favoritas', style: TextStyle(
-            fontSize: 20, color: Colors.black45
+            fontSize: 20
           )),
           const SizedBox(height: 21),
 
