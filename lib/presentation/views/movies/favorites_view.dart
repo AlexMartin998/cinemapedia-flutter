@@ -13,13 +13,28 @@ class FavoritesView extends ConsumerStatefulWidget {
 
 
 class FavoritesViewState extends ConsumerState<FavoritesView> {
+  bool isLastPage = false;
+  bool isLoading = false;
+
 
   @override
-  void initState() {
+  void initState() {  // ngOnInit() :v
     super.initState();
 
-    ref.read(favoriteMoviesProvider.notifier).loadNextPage();
+    loadNextPage();
   }
+
+
+  void loadNextPage() async {
+    if (isLastPage || isLoading) return;
+    isLoading = true;
+
+    final movies = await ref.read(favoriteMoviesProvider.notifier).loadNextPage();
+    isLoading = false;
+
+    if (movies.isEmpty) isLastPage = true;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +43,11 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
 
 
     return Scaffold(
-      body: MovieMasonry(movies: favoriteMoviesList),
+      body: MovieMasonry(
+        loadNextPage: loadNextPage,
+
+        movies: favoriteMoviesList,
+      ),
     );
   }
 }
