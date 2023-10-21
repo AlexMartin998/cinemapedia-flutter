@@ -108,8 +108,19 @@ class _Slide extends StatelessWidget {
             width: 150,
             child: ClipRRect( // w borderradious
               borderRadius: BorderRadius.circular(20),
-    
-              child: Image.network(
+
+              child: GestureDetector(
+                onTap: () => context.push('/home/0/movie/${movie.id}'),
+
+                child: FadeInImage(
+                  height: 220,
+                  fit: BoxFit.cover,
+                  placeholder: const AssetImage('assets/loaders/bottle-loader.gif'),
+                  image: NetworkImage(movie.posterPath),
+                ),
+              ),
+
+              /* child: Image.network(
                 movie.posterPath,
                 width: 150,  // like skeleton to prevent splits
                 fit: BoxFit.cover,
@@ -132,7 +143,9 @@ class _Slide extends StatelessWidget {
                     ),
                   );
                 },
-              ),
+              ), */
+            
+
             ),
           ),
           const SizedBox(height: 6),
