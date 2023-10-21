@@ -1,10 +1,11 @@
+import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+
 import 'package:cinema_pedia/domain/entities/movie.dart';
 import 'package:cinema_pedia/presentation/providers/movies/movie_info_provider.dart';
 import 'package:cinema_pedia/presentation/providers/providers.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 
 
