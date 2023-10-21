@@ -213,7 +213,7 @@ class _MovieDetails extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(9),
+          padding: const EdgeInsets.fromLTRB(9, 24, 9, 15),
 
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,7 +267,7 @@ class _MovieDetails extends StatelessWidget {
 
 
         // ensure visibility (just margin)
-        const SizedBox(height: 24),
+        const SizedBox(height: 15),
       ],
     );
   }
