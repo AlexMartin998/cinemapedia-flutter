@@ -3,22 +3,25 @@ import 'package:go_router/go_router.dart';
 
 
 class CustomBottomNavigation extends StatelessWidget {
-  final int currentIndex;
+  final StatefulNavigationShell navigationShell;
 
-  const CustomBottomNavigation({super.key, required this.currentIndex});
+  const CustomBottomNavigation({super.key, required this.navigationShell});
 
-  void onDestinationSelected(BuildContext context, int index) {
-    context.go('/home/$index');
+  void onDestinationSelected(int index) {
+    navigationShell.goBranch(index);
   }
 
-  
+
   @override
   Widget build(BuildContext context) {
 
     return NavigationBar(
       surfaceTintColor: Colors.transparent,
-      onDestinationSelected: (value) => onDestinationSelected(context, value),
-      selectedIndex: currentIndex,
+
+      // like onTap
+      // onDestinationSelected: (value) => onDestinationSelected(value),
+      onDestinationSelected: onDestinationSelected,
+      selectedIndex: navigationShell.currentIndex,
 
       destinations: const [
         NavigationDestination(
@@ -36,4 +39,5 @@ class CustomBottomNavigation extends StatelessWidget {
       ],
     );
   }
+
 }
