@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
-// riverpod provider consumer stateless
+// riverpod: provider consumer for stateless widgets
 class ActorsByMovie extends ConsumerWidget {
   final String movieId;
 
@@ -43,11 +43,15 @@ class ActorsByMovie extends ConsumerWidget {
                 FadeInRight(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      actor.profilePath,
+
+                    child: FadeInImage(
                       height: 180,
                       width: 135,
                       fit: BoxFit.cover,
+                      placeholder: const AssetImage('assets/loaders/bottle-loader.gif'),
+                      image: NetworkImage(
+                        actor.profilePath,
+                      ),
                     ),
                   ),
                 ),
