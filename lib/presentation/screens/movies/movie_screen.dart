@@ -68,6 +68,16 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
 }
 
 
+// // // lo crea aqui x simplicidad ya q solo se va a usar aqui este provider
+// // FutureProvider: Resolver Async Tasks to return a state
+// debo consultar en db para saber el state y retornarlo. Como es Async uso FutureProvider
+// .family() recibir Args en el provider
+final isFavoriteProvider = FutureProvider.family((ref, int movieId) {
+  final localStorageRespository = ref.watch(localStorageRepositoryProvider);
+  return localStorageRespository.isMovieFavorite(movieId);
+});
+
+
 
 class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
@@ -77,6 +87,9 @@ class _CustomSliverAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // future provider
+    final isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
+
     // size real del mobile
     final size = MediaQuery.of(context).size;
 
@@ -88,12 +101,19 @@ class _CustomSliverAppBar extends ConsumerWidget {
       // I Like it Btn
       actions: [
         IconButton(
-          onPressed: (){
+          onPressed: () async {
             // temp impl
-            ref.watch(localStorageRepositoryProvider).toggleFavorite(movie);
+            await ref.watch(localStorageRepositoryProvider).toggleFavorite(movie);
+            // invalida para regresar al init state: el init state es 1 future q no se resuelve, al invalidarlo lo vuelve a hacer la req
+            ref.invalidate(isFavoriteProvider(movie.id));
           }, 
-          icon: const Icon(Icons.favorite_border),
-          // icon: const Icon(Icons.favorite_rounded, color: Colors.red),
+          icon: isFavoriteFuture.when(
+            loading: () => const CircularProgressIndicator(), // no se vera xq es muy rapido
+            data: (isFavorite) => isFavorite
+              ? const Icon(Icons.favorite_rounded, color: Colors.red)
+              : const Icon(Icons.favorite_border),
+            error: (_, __) => throw UnimplementedError(),
+          ),
         ),
       ],
 
