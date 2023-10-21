@@ -5,6 +5,7 @@ import 'package:animate_do/animate_do.dart';
 
 import 'package:cinema_pedia/domain/entities/movie.dart';
 import 'package:cinema_pedia/presentation/providers/providers.dart';
+import 'package:cinema_pedia/presentation/widgets/widgets.dart';
 
 
 
@@ -262,7 +263,7 @@ class _MovieDetails extends StatelessWidget {
 
 
         /* actors */
-        _ActorsByMovie(movieId: movie.id.toString()),
+        ActorsByMovie(movieId: movie.id.toString()),
 
 
 
@@ -273,75 +274,6 @@ class _MovieDetails extends StatelessWidget {
   }
 }
 
-
-
-// riverpod provider consumer stateless
-class _ActorsByMovie extends ConsumerWidget {
-  final String movieId;
-
-  const _ActorsByMovie({required this.movieId});
-
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // trhough provider (state): <Map<String, List<Actor>>
-    final actors = ref.watch(actorsByMoviePorivder)[movieId];
-    if(actors == null) { // loading actors 'cause all movies have actors
-      return const Center(
-        child: CircularProgressIndicator(strokeWidth: 2),
-      );
-    }
-
-    // como evaluo con el loader se q aqui ya tengo actores
-    return SizedBox(
-      height: 300,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(), // rebote ios/android
-        itemCount: actors.length,
-
-        itemBuilder: (context, index) {
-          final actor = actors[index];
-
-          return Container(
-            padding: const EdgeInsets.all(8),
-            width: 135,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-
-              children: [
-                /* image */
-                FadeInRight(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      actor.profilePath,
-                      height: 180,
-                      width: 135,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-
-                /* name */
-                Text(actor.name, maxLines: 2),
-                Text(actor.character ?? '',
-                  maxLines: 2,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    // >2 lines: ...
-                    overflow: TextOverflow.ellipsis
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
 
 
 
