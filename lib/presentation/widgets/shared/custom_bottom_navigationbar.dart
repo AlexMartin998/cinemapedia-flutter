@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 
 class CustomBottomNavigation extends StatelessWidget {
-  const CustomBottomNavigation({super.key});
+  final int currentIndex;
+
+  const CustomBottomNavigation({super.key, required this.currentIndex});
+
+  void onDestinationSelected(BuildContext context, int index) {
+    context.go('/home/$index');
+  }
 
   
   @override
@@ -10,6 +17,8 @@ class CustomBottomNavigation extends StatelessWidget {
 
     return NavigationBar(
       surfaceTintColor: Colors.transparent,
+      onDestinationSelected: (value) => onDestinationSelected(context, value),
+      selectedIndex: currentIndex,
 
       destinations: const [
         NavigationDestination(

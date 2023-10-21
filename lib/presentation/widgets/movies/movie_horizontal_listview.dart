@@ -117,7 +117,9 @@ class _Slide extends StatelessWidget {
                   if (loadingProgress == null) {
                     return GestureDetector( // detectar gestos con la screen (taps)
                       // mobile: return xq esta como children route
-                      onTap: () => context.go('/movie/${movie.id}'), // deeplinking web
+                      // without IndexedStack to keepAlive state
+                      // onTap: () => context.go('/movie/${movie.id}'), // deeplinking web
+                      onTap: () => context.go('/home/0/movie/${movie.id}'), // deeplinking web
                       child: FadeIn(child: child),
                     );
                   }

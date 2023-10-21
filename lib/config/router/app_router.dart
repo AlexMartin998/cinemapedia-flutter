@@ -4,13 +4,21 @@ import 'package:go_router/go_router.dart';
 
 // facilita el W. Da compatibilidad web con deeplinking
 final appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/home/0',
 
   routes: [
     GoRoute(
-      path: '/',
+      // viene a ser la ruta raiz
+      path: '/home/:page', // idx del tab to render
       name: HomeScreen.name,
-      builder: (context, state) => const HomeScreen(),
+      builder: (context, state) {
+        // tomar el valor del Url Param
+        final pageIndex = int.parse(state.pathParameters['page'] ?? '0');
+
+        return HomeScreen(
+          pageIndex: pageIndex,
+        );
+      },
 
       // routes child
       routes: [
@@ -27,6 +35,12 @@ final appRouter = GoRouter(
       ]
     ),
 
+    // // redirecciono a nuestro nuev sistema de rutas
+    // ahora el   ( / -> /home/0 )
+    GoRoute(
+      path: '/',
+      redirect: (_, __) => '/home/0',
+    ),
 
   ]
 );
