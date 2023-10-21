@@ -213,53 +213,11 @@ class _MovieDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(9, 24, 9, 15),
-
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(21),
-                child: Image.network(
-                  movie.posterPath,
-                  width: size.width * .3,
-                ),
-              ),
-              const SizedBox(width: 10),
-
-              /* description */
-              SizedBox(
-                width: (size.width - 40) * .7,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(movie.title, style: textStyles.titleLarge),
-                    Text(movie.overview),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+        /* Title, Overview & Rating */
+        _TitleAndOverview(movie: movie, size: size, textStyles: textStyles),
 
         /* genres */
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Wrap( // children aligned to the start
-            children: [
-              ...movie.genreIds.map((gender) => Container(
-                margin: const EdgeInsets.only(right: 10),
-                child: Chip(
-                  label: Text(gender),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)
-                  ),
-                ),
-              )),
-            ],
-          ),
-        ),
+        _Genres(movie: movie),
 
 
         /* actors */
@@ -274,7 +232,87 @@ class _MovieDetails extends StatelessWidget {
   }
 }
 
+class _Genres extends StatelessWidget {
+  const _Genres({
+    required this.movie,
+  });
 
+  final Movie movie;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+
+      child: Center(
+        child: Wrap( // children aligned to the start
+          children: [
+            ...movie.genreIds.map((gender) => Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: Chip(
+                label: Text(gender),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)
+                ),
+              ),
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+class _TitleAndOverview extends StatelessWidget {
+  final Movie movie;
+  final Size size;
+  final TextTheme textStyles;
+
+  const _TitleAndOverview({
+    required this.movie,
+    required this.size,
+    required this.textStyles,
+  });
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(9, 24, 9, 15),
+
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /* Image */
+          ClipRRect(
+            borderRadius: BorderRadius.circular(21),
+            child: Image.network(
+              movie.posterPath,
+              width: size.width * .3,
+            ),
+          ),
+          const SizedBox(width: 10),
+
+          /* Description */
+          SizedBox(
+            width: (size.width - 40) * .7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(movie.title, style: textStyles.titleLarge),
+                Text(movie.overview),
+
+                MovieRating(voteAverage: movie.voteAverage, popularity: 12),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 
 class _CustomGradient extends StatelessWidget {

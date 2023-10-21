@@ -1,7 +1,9 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:card_swiper/card_swiper.dart';
-import 'package:cinema_pedia/domain/entities/movie.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
+
+import 'package:cinema_pedia/domain/entities/movie.dart';
 
 
 class MoviesSlideshow extends StatelessWidget {
@@ -18,7 +20,7 @@ class MoviesSlideshow extends StatelessWidget {
       height: 210,
       width: double.infinity, // todo width disponible
 
-      child: Swiper(
+      child: Swiper(  // slider/carrousel
         viewportFraction: 0.8, // ver fraccion del prev/next slide
         scale: 0.87, // scale prev/next slide
         autoplay: true,
@@ -60,50 +62,61 @@ class _Slide extends StatelessWidget {
       ]
     );
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
+    return GestureDetector(
+      // only onTap, so it actually allow scrolling
+      onTap: () => context.push('/home/0/movie/${ movie.id }'),
 
-      child: DecoratedBox(
-        decoration: decoration,
-        child: ClipRRect( // w con borderRadious
-          borderRadius: BorderRadius.circular(20),
-
-          child: Stack(
-            children: [
-              Image.network(  // FadeInImage()
-                movie.backdropPath,
-                fit: BoxFit.cover,
-                width: double.infinity,
-            
-                // saber cuando se construye la image
-                loadingBuilder: (context, child, loadingProgress) { // built in runtime
-                  if(loadingProgress == null) return FadeIn(child: child); // ya la cargo x completo
-                  
-                  return const DecoratedBox(
-                    decoration: BoxDecoration(color: Colors.black12),
-                  );
-                },
-              ),
-
-              _SlideLabel(
-                bottom: 12,
-                left: 12,
-                movie: movie,
-                child: Text(movie.title, style: const TextStyle(color: Colors.white)),
-              ),
-
-              _SlideLabel(
-                bottom: 12,
-                right: 12,
-                movie: movie,
-                child: Row(
-                  children: [
-                    const Icon(Icons.star, color: Colors.yellow, size: 14),
-                    Text('${movie.voteAverage}', style: const TextStyle(color: Colors.white))
-                  ],
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+    
+        child: DecoratedBox(
+          decoration: decoration,
+          child: ClipRRect( // w con borderRadious
+            borderRadius: BorderRadius.circular(20),
+    
+            child: Stack(
+              children: [
+                FadeInImage(
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  placeholder: const AssetImage('assets/loaders/bottle-loader.gif'),
+                  image: NetworkImage(movie.backdropPath),
                 ),
-              )
-            ],
+                /* Image.network(  // FadeInImage()
+                  movie.backdropPath,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+              
+                  // saber cuando se construye la image
+                  loadingBuilder: (context, child, loadingProgress) { // built in runtime
+                    if(loadingProgress == null) return FadeIn(child: child); // ya la cargo x completo
+                    
+                    return const DecoratedBox(
+                      decoration: BoxDecoration(color: Colors.black12),
+                    );
+                  },
+                ), */
+    
+                _SlideLabel(
+                  bottom: 12,
+                  left: 12,
+                  movie: movie,
+                  child: Text(movie.title, style: const TextStyle(color: Colors.white)),
+                ),
+    
+                _SlideLabel(
+                  bottom: 12,
+                  right: 12,
+                  movie: movie,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.yellow, size: 14),
+                      Text('${movie.voteAverage}', style: const TextStyle(color: Colors.white))
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
