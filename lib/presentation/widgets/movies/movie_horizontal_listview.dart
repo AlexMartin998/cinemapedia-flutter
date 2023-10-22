@@ -112,7 +112,7 @@ class _Slide extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
 
               child: GestureDetector(
-                onTap: () => context.push('/home/0/movie/${movie.id}'),
+                onTap: () => context.push('/movie/${movie.id}'),
 
                 child: FadeInImage(
                   height: 220,

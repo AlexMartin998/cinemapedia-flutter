@@ -64,7 +64,7 @@ class _Slide extends StatelessWidget {
 
     return GestureDetector(
       // only onTap, so it actually allow scrolling
-      onTap: () => context.push('/home/0/movie/${ movie.id }'),
+      onTap: () => context.push('/movie/${ movie.id }'),
 
       child: Padding(
         padding: const EdgeInsets.only(bottom: 30),

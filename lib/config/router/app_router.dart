@@ -56,8 +56,8 @@ final appRouter = GoRouter(
         // // The route branch for the 2nd tab of the bottom navigation bar.
         StatefulShellBranch(routes: [
           GoRoute(
-            path: '/categories',
-            builder: (context, state) => const Center(child: Text('Category')),
+            path: '/popular',
+            builder: (context, state) => const PopularView(),
           )
         ]),
 

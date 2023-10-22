@@ -61,7 +61,7 @@ class FavoritesViewState extends ConsumerState<FavoritesView> with AutomaticKeep
           const SizedBox(height: 21),
 
           FilledButton.tonal(
-            onPressed: () => context.go('/home/0'),
+            onPressed: () => context.go('/'),
             child: const Text("Descubre nuevos titulos"),
           ),
         ],
