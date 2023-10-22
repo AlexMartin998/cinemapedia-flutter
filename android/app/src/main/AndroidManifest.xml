@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- videos de internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:label="cinema_pedia"
         android:name="${applicationName}"

@@ -12,8 +12,10 @@ class CustomBottomNavigation extends StatelessWidget {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
+    // final color = Theme.of(context).colorScheme;
 
     return NavigationBar(
       surfaceTintColor: Colors.transparent,
@@ -26,18 +28,19 @@ class CustomBottomNavigation extends StatelessWidget {
       destinations: const [
         NavigationDestination(
           icon: Icon(Icons.home_max),
-          label: 'Home',
+          label: 'Inicio',
         ),
         NavigationDestination(
-          icon: Icon(Icons.label_outline),
-          label: 'Categories',
+          icon: Icon(Icons.thumbs_up_down_outlined),
+          label: 'Populares',
         ),
         NavigationDestination(
           icon: Icon(Icons.favorite_outline),
-          label: 'Favorites',
+          label: 'Favoritos',
         ),
       ],
     );
   }
+
 
 }

@@ -6,7 +6,7 @@ class MovieDetails {
     final List<Genre> genres;
     final String homepage;
     final int id;
-    final String imdbId;
+    final String? imdbId;
     final String originalLanguage;
     final String originalTitle;
     final String overview;
@@ -127,7 +127,7 @@ class BelongsToCollection {
         id: json["id"],
         name: json["name"],
         posterPath: json["poster_path"],
-        backdropPath: json["backdrop_path"],
+        backdropPath: json["backdrop_path"] ?? '',
     );
 
     Map<String, dynamic> toJson() => {
@@ -162,7 +162,7 @@ class ProductionCompany {
     final int id;
     final String? logoPath;
     final String name;
-    final String originCountry;
+    final String? originCountry;
 
     ProductionCompany({
         required this.id,

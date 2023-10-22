@@ -17,7 +17,32 @@ class MovieMasonry extends StatefulWidget {
 
 
 class _MovieMasonryState extends State<MovieMasonry> {
-  
+  // infinite scroll
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // // // infinite scroll
+    // // Listeners: se invoca/excecute muchas veces (0.00001) x tasa de refresco screen x eso tener vandera para las req http/db, en este caso el loader
+    scrollController.addListener(() {
+      if (widget.loadNextPage == null) return;
+
+      // viene el callback
+      if ((scrollController.position.pixels + 102) >= scrollController.position.maxScrollExtent) {
+        widget.loadNextPage!();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +55,15 @@ class _MovieMasonryState extends State<MovieMasonry> {
         itemCount: widget.movies.length,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
+
+        controller: scrollController, // infinite scroll
     
         itemBuilder: (context, index) {
           // desordenar alineacion
           if (index == 1) {
             return Column(
               children: [
-                const SizedBox(height: 40),
+                const SizedBox(height: 24),
                 MoviePosterLink(movie: widget.movies[index])
               ],
             );
