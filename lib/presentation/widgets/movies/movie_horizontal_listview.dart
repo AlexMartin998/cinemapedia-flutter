@@ -66,7 +66,9 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
             // widget nos da acceso a las Props del Widget
             if (widget.title != null || widget.subTitle != null)
               _Title(title: widget.title, subTitle: widget.subTitle),
-    
+            if (widget.title != null || widget.subTitle != null) 
+              const SizedBox(height: 6),
+
             // listView req 1 size especifico
             Expanded(
               child: ListView.builder( // lazy & built in runtime

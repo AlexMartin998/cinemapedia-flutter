@@ -89,7 +89,7 @@ class _CustomSliverAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // future provider
+    // future provider: value (bool)
     final isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
 
     // size real del mobile
@@ -113,7 +113,7 @@ class _CustomSliverAppBar extends ConsumerWidget {
             // invalida para regresar al init state: el init state es 1 future q no se resuelve, al invalidarlo lo vuelve a hacer la req
             ref.invalidate(isFavoriteProvider(movie.id));
           }, 
-          icon: isFavoriteFuture.when(
+          icon: isFavoriteFuture.when( // Performs an action based on the state of the value
             loading: () => const CircularProgressIndicator(), // no se vera xq es muy rapido
             data: (isFavorite) => isFavorite
               ? const Icon(Icons.favorite_rounded, color: Colors.red)
@@ -220,10 +220,11 @@ class _MovieDetails extends StatelessWidget {
         /* genres */
         _Genres(movie: movie),
 
-
         /* actors */
         ActorsByMovie(movieId: movie.id.toString()),
 
+        /* similar movies */
+        SimilarMovies(movieId: movie.id ),
 
 
         // ensure visibility (just margin)
@@ -243,7 +244,7 @@ class _Genres extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 21),
 
       child: Center(
         child: Wrap( // children aligned to the start
@@ -281,7 +282,7 @@ class _TitleAndOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(9, 24, 9, 15),
+      padding: const EdgeInsets.fromLTRB(9, 24, 9, 9),
 
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

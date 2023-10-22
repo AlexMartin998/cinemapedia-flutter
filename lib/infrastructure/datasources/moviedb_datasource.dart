@@ -101,7 +101,7 @@ class MoviedbDatasource extends MoviesDataSource {
 
 
   @override
-  Future<List<Movie>> getSimilarMovies(String movieId) async {
+  Future<List<Movie>> getSimilarMovies(int movieId) async {
     // without paging
     final res = await dio.get('/movie/$movieId/similar');
     return _jsonToMovies(res.data);
