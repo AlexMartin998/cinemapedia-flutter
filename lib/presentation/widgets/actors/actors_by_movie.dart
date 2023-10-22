@@ -14,10 +14,14 @@ class ActorsByMovie extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // trhough provider (state): <Map<String, List<Actor>>
-    final actors = ref.watch(actorsByMoviePorivder)[movieId];
-    if(actors == null) { // loading actors 'cause all movies have actors
-      return const Center(
-        child: CircularProgressIndicator(strokeWidth: 2),
+    final actorsByMovie = ref.watch(actorsByMoviePorivder)[movieId];
+    if (actorsByMovie == null) { // loading actors 'cause all movies have actors
+      return Container(
+        height: 100,
+        margin: const EdgeInsets.only(bottom: 50),
+        child: const Center(
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
       );
     }
 
@@ -27,10 +31,10 @@ class ActorsByMovie extends ConsumerWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(), // rebote ios/android
-        itemCount: actors.length,
+        itemCount: actorsByMovie.length,
 
         itemBuilder: (context, index) {
-          final actor = actors[index];
+          final actor = actorsByMovie[index];
 
           return Container(
             padding: const EdgeInsets.all(8),

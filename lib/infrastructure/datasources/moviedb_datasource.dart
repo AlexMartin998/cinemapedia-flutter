@@ -83,6 +83,7 @@ class MoviedbDatasource extends MoviesDataSource {
     return movie;
   }
 
+
   @override
   Future<List<Movie>> searchMovies(String query) async {
     // clean suggestions when query is empty
@@ -99,6 +100,15 @@ class MoviedbDatasource extends MoviesDataSource {
   }
 
 
+  @override
+  Future<List<Movie>> getSimilarMovies(String movieId) async {
+    // without paging
+    final res = await dio.get('/movie/$movieId/similar');
+    return _jsonToMovies(res.data);
+  }
+
+
+
   List<Movie> _jsonToMovies(Map<String, dynamic> jsonData) {
     final movieDBResponse = MovieDbResponse.fromJson(jsonData);
 
@@ -111,5 +121,5 @@ class MoviedbDatasource extends MoviesDataSource {
 
     return movies;
   }
-
+  
 }
