@@ -110,7 +110,17 @@ class MoviedbDatasource extends MoviesDataSource {
 
   @override
   Future<List<String>> getYoutubeVideosById(int movieId) async {
-    return [];
+    final response = await dio.get('/movie/$movieId/videos');
+    final moviedbVideosReponse = MoviedbVideosResponse.fromJson(response.data);
+    final youtubeIds = <String>[];
+
+    for (final video in moviedbVideosReponse.results) {
+      if ( video.site == 'YouTube' ) {
+        youtubeIds.add(video.key);
+      }
+    }
+
+    return youtubeIds;
   }
 
 
