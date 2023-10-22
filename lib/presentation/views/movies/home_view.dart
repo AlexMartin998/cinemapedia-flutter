@@ -13,8 +13,9 @@ class HomeView extends ConsumerStatefulWidget {
 }
 
 
+
 // ConsumerState tiene acceso al   ref   sin necesidad de pasarlo x el builder <- Riverpod
-class HomeViewState extends ConsumerState<HomeView> {
+class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClientMixin {
 
   // // lifecycle
   @override
@@ -32,6 +33,8 @@ class HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // req by mixin
+
     // // riverpod retorna el State: List<Movie> del provider
     // app global loader
     final initialLoading = ref.watch(initialLoadingProvider);
@@ -154,4 +157,10 @@ class HomeViewState extends ConsumerState<HomeView> {
       ),
     );
   }
+
+
+  // keep alive
+  @override
+  bool get wantKeepAlive => true;
+
 }

@@ -1,8 +1,10 @@
-import 'package:cinema_pedia/presentation/providers/providers.dart';
-import 'package:cinema_pedia/presentation/widgets/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+
+import 'package:cinema_pedia/presentation/providers/providers.dart';
+import 'package:cinema_pedia/presentation/widgets/widgets.dart';
+
 
 
 class FavoritesView extends ConsumerStatefulWidget {
@@ -13,7 +15,8 @@ class FavoritesView extends ConsumerStatefulWidget {
 }
 
 
-class FavoritesViewState extends ConsumerState<FavoritesView> {
+// keepAlive Mixin
+class FavoritesViewState extends ConsumerState<FavoritesView> with AutomaticKeepAliveClientMixin {
   bool isLastPage = false;
   bool isLoading = false;
 
@@ -39,6 +42,8 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // lo req el mixin
+
     final favoriteMoviesMap = ref.watch(favoriteMoviesProvider);
     final favoriteMoviesList = favoriteMoviesMap.values.toList();
 
@@ -73,4 +78,10 @@ class FavoritesViewState extends ConsumerState<FavoritesView> {
       ),
     );
   }
+
+
+  // // keep alive
+  @override
+  bool get wantKeepAlive => true;
+
 }

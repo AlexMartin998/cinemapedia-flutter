@@ -5,12 +5,24 @@ import 'package:cinema_pedia/presentation/providers/movies/movies_providers.dart
 import 'package:cinema_pedia/presentation/widgets/movies/movie_masonry.dart';
 
 
-class PopularView extends ConsumerWidget {
+
+class PopularView extends ConsumerStatefulWidget {
+
   const PopularView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final popularMovies = ref.watch(popularMoviesProvider);
+  PopularViewState createState() => PopularViewState();
+}
+
+
+// // keepAlive mixin req statefull widget
+class PopularViewState extends ConsumerState<PopularView> with AutomaticKeepAliveClientMixin {
+
+  @override
+  Widget build(BuildContext context ) {
+    super.build(context);  // req by mixin
+
+    final popularMovies = ref.watch( popularMoviesProvider );
 
     if ( popularMovies.isEmpty ) {
       return const Center(child: CircularProgressIndicator(strokeWidth: 2));
@@ -19,8 +31,14 @@ class PopularView extends ConsumerWidget {
     return Scaffold(
       body: MovieMasonry(
         loadNextPage: () => ref.read(popularMoviesProvider.notifier).loadNextPage(),
-        movies: popularMovies,
+        movies: popularMovies
       ),
     );
   }
+
+
+  // keepAlive
+  @override
+  bool get wantKeepAlive => true;
+
 }
