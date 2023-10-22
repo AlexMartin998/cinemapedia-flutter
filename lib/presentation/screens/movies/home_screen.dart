@@ -63,6 +63,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     // actual content:
     return Scaffold(
       body: PageView(
+        // solo permite navegar entre pages/views con los tabs
+        physics: const NeverScrollableScrollPhysics(),
+
         controller: pageController,
         children: viewRoutes,
       ),
@@ -78,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   // // keepalive mixin:
   @override
   bool get wantKeepAlive => true;
+
 }
 
 

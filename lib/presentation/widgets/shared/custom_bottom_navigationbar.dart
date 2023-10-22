@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 
 class CustomBottomNavigation extends StatelessWidget {
+
   final int currentIndex;
 
   const CustomBottomNavigation({super.key, required this.currentIndex});
@@ -11,12 +12,14 @@ class CustomBottomNavigation extends StatelessWidget {
     context.go('/home/$index');
   }
 
-  
+
   @override
   Widget build(BuildContext context) {
+    // final color = Theme.of(context).colorScheme;
 
     return NavigationBar(
       surfaceTintColor: Colors.transparent,
+      // indicatorColor: color.primary,
       onDestinationSelected: (value) => onDestinationSelected(context, value),
       selectedIndex: currentIndex,
 
@@ -36,4 +39,5 @@ class CustomBottomNavigation extends StatelessWidget {
       ],
     );
   }
+
 }

@@ -4,7 +4,8 @@ class AppTheme {
 
   ThemeData getTheme() => ThemeData(
     useMaterial3: true,
-    colorSchemeSeed: const Color(0xFF2862F5), // color hexagesimal
+    // colorSchemeSeed: const Color(0xFF2862F5), // color hexagesimal
+    colorSchemeSeed: Colors.white,
     brightness: Brightness.dark
     
   );
