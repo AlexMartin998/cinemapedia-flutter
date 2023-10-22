@@ -1,6 +1,7 @@
 import 'package:cinema_pedia/domain/entities/movie.dart';
 import 'package:cinema_pedia/presentation/delegates/search_movie_delegate.dart';
 import 'package:cinema_pedia/presentation/providers/providers.dart';
+import 'package:cinema_pedia/presentation/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +17,9 @@ class CustomAppbar extends ConsumerWidget {
     final color = Theme.of(context).colorScheme;
     final titleStyle = Theme.of(context).textTheme.titleMedium;
 
+    final bool isDarkMode = ref.watch(themeNotifierProvider).isDarkMode;
+
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -30,6 +34,7 @@ class CustomAppbar extends ConsumerWidget {
               Text('Cinemapedia', style: titleStyle),
 
               const Spacer(), // like flex 1
+
               IconButton(
                 onPressed: () {
                   // // read on callbacks/listeners/onSomething
@@ -55,6 +60,11 @@ class CustomAppbar extends ConsumerWidget {
                   });
                 },
                 icon: const Icon(Icons.search)
+              ),
+
+              IconButton(
+                onPressed: () =>  ref.read(themeNotifierProvider.notifier).toggleDarkMode(),
+                icon: Icon(isDarkMode ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
               ),
             ],
           ),
