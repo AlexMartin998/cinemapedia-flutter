@@ -249,8 +249,14 @@ class _Genres extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 21),
 
-      child: Center(
-        child: Wrap( // children aligned to the start
+      // // Center Wrap:
+      child: SizedBox(
+        width: double.infinity,
+
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.center,
+
           children: [
             ...movie.genreIds.map((gender) => Container(
               margin: const EdgeInsets.only(right: 10),
@@ -264,6 +270,22 @@ class _Genres extends StatelessWidget {
           ],
         ),
       ),
+
+      /* child: Center(
+        child: Wrap( // children aligned to the start
+          children: [
+            ...movie.genreIds.map((gender) => Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: Chip(
+                label: Text(gender),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)
+                ),
+              ),
+            )),
+          ],
+        ),
+      ), */
     );
   }
 }
