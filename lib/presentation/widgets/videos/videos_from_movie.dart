@@ -32,7 +32,10 @@ class VideosFromMovie extends ConsumerWidget {
     final moviesFromVideo = ref.watch(videosFromMovieProvider(movieId));
 
     return moviesFromVideo.when(
-      data: ( videos ) => _VideosList( videos: videos ),
+      data: ( videos ) => Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: _VideosList( videos: videos ),
+      ),
 
       error: (_, __) =>
           const Center(child: Text('No se pudo cargar los vídeos de la película')),
@@ -61,26 +64,27 @@ class _VideosList extends StatelessWidget {
     }
 
     // // there are videos
-    return Container(
-      margin: const EdgeInsetsDirectional.only(bottom: 50),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
-        children: [
-          // ignore: prefer_const_constructors
-          /* Label */
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ignore: prefer_const_constructors
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: const Padding(
+            padding: EdgeInsets.only(bottom: 9),
             child: Text('Videos', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
           ),
+        ),
 
-          /* videos */
-          ...videos.map(
-            (video) => _YouTubeVideoPlayer(youtubeId: videos.first.youtubeKey, name: video.name)
-          ).toList()
-        ],
-      ),
-      );
+        // // Although I have several videos, I only want to show the 1st one
+        _YouTubeVideoPlayer(youtubeId: videos.first.youtubeKey, name: videos.first.name )
+
+        // // * If you want to show all videos
+        /*...videos.map(
+          (video) => _YouTubeVideoPlayer(youtubeId: videos.first.youtubeKey, name: video.name)
+        ).toList()*/
+      ],
+    );
   }
 }
 
@@ -112,9 +116,13 @@ class _YouTubeVideoPlayerState extends State<_YouTubeVideoPlayer> {
     _controller = YoutubePlayerController(
       initialVideoId: widget.youtubeId,
       flags: const YoutubePlayerFlags(
+        showLiveFullscreenButton: false,
         mute: false,
         autoPlay: false,
-        disableDragSeek: false,
+
+        disableDragSeek: true, // 
+        hideThumbnail: true, // se vea play de YT
+
         loop: false,
         isLive: false,
         forceHD: false,
@@ -137,22 +145,15 @@ class _YouTubeVideoPlayerState extends State<_YouTubeVideoPlayer> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
 
       // // YouTube player (dep):
-      child: YoutubePlayerBuilder(
-        player: YoutubePlayer(controller: _controller), 
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(widget.name),
+          const SizedBox(height: 4),
 
-        builder: (context, player) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-
-            children: [
-              Text(widget.name),
-              player,
-              const SizedBox(height: 20 ),
-            ],
-          );
-        },
-      ),
+          YoutubePlayer(controller: _controller)  // actual youtube player
+        ],
+      )
     );
   }
 }

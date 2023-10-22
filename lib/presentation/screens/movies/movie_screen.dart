@@ -231,7 +231,7 @@ class _MovieDetails extends StatelessWidget {
 
 
         // ensure visibility (just margin)
-        const SizedBox(height: 15),
+        const SizedBox(height: 24),
       ],
     );
   }
