@@ -343,7 +343,7 @@ class _TitleAndOverview extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
 
-                    Text('Estreno: ${ HumanFormats.shortDate(movie.releaseDate) }')
+                    Text(HumanFormats.shortDate(movie.releaseDate))
                   ],
                 ),
               ],

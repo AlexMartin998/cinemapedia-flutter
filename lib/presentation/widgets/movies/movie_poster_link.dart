@@ -28,6 +28,7 @@ class MoviePosterLink extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           
           child: FadeInImage(
+            height: 210,
             fit: BoxFit.cover,
             placeholder: const AssetImage('assets/loaders/bottle-loader.gif'),
             image: NetworkImage(movie.posterPath),

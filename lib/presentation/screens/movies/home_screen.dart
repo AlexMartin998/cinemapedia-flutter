@@ -1,5 +1,6 @@
 import 'package:cinema_pedia/presentation/views/movies/favorites_view.dart';
 import 'package:cinema_pedia/presentation/views/movies/home_view.dart';
+import 'package:cinema_pedia/presentation/views/views.dart';
 import 'package:cinema_pedia/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class HomeScreen extends StatelessWidget {
   // setea los Index para c/View
   final viewRoutes = const <Widget>[
     HomeView(),
-    SizedBox(), // categories
+    PopularView(), // popular
     FavoritesView(),
   ];
 
