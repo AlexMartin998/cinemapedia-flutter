@@ -1,10 +1,10 @@
+import 'package:dio/dio.dart';
+
 import 'package:cinema_pedia/config/constants/environment.dart';
 import 'package:cinema_pedia/domain/datasources/movies_datasource.dart';
 import 'package:cinema_pedia/domain/entities/movie.dart';
 import 'package:cinema_pedia/infrastructure/mappers/movie_mapper.dart';
-import 'package:cinema_pedia/infrastructure/models/moviedb/movie_details.dart';
-import 'package:cinema_pedia/infrastructure/models/moviedb/moviedb_response.dart';
-import 'package:dio/dio.dart';
+import 'package:cinema_pedia/infrastructure/models/models.dart';
 
 
 class MoviedbDatasource extends MoviesDataSource {
@@ -105,6 +105,12 @@ class MoviedbDatasource extends MoviesDataSource {
     // without paging
     final res = await dio.get('/movie/$movieId/similar');
     return _jsonToMovies(res.data);
+  }
+
+
+  @override
+  Future<List<String>> getYoutubeVideosById(int movieId) async {
+    return [];
   }
 
 
