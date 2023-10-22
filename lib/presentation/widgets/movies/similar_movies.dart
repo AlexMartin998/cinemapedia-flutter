@@ -1,7 +1,8 @@
-import 'package:cinema_pedia/presentation/providers/movies/movies_repository_provider.dart';
-import 'package:cinema_pedia/presentation/widgets/movies/movie_horizontal_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:cinema_pedia/presentation/providers/movies/movies_repository_provider.dart';
+import 'package:cinema_pedia/presentation/widgets/movies/movie_horizontal_listview.dart';
 
 
 // // // lo crea aqui x simplicidad ya q solo se va a usar aqui este provider
